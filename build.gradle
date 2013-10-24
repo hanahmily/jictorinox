@@ -1,0 +1,40 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.7
+version = '1.0.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'jictorinox', 'Implementation-Version': version
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    mavenRepo urls: "http://10.1.249.42:8081/nexus/content/groups/public/"
+}
+
+dependencies {
+    compile fileTree(dir: 'lib', include: '*.jar')
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'org.slf4j:slf4j-log4j12:1.7.5'
+    compile 'redis.clients:jedis:2.1.0'
+    compile 'commons-dbcp:commons-dbcp:1.4'
+    compile 'org.jodd:jodd-core:3.4.5'
+    compile 'org.quartz-scheduler:quartz:2.2.1'
+    compile 'org.reflections:reflections:0.9.9-RC1'
+    compile 'org.apache.geronimo.javamail:geronimo-javamail_1.3.1_provider:1.1'
+
+    testCompile 'junit:junit:4+'
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: "http://10.1.249.42:8081/nexus/content/repositories/releases/") {
+            authentication(userName: "deployment", password: "dd")
+            pom.groupId = "org.jictorinox"
+            pom.artifactId = "jictorinox"
+        }
+    }
+}
